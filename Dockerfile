@@ -74,22 +74,11 @@ WORKDIR /app
 COPY . /app
 COPY --from=dep-builder /app /app
 
-# Add this right before the build command
-RUN find . -type d -name ".git" -exec rm -rf {} + || true
-
-RUN find . -type d -name ".git" -exec rm -rf {} + || true
-ENV GIT_COMMIT_HASH=unknown
-ENV GIT_TAG=latest
-
-RUN \
-    set -ex && \
-    # cp /app/scripts/docker/minify-docker.js /minifier/ && \
-    # export PROJECT_ROOT=/app && \
-    # node /minifier/minify-docker.js && \
-    # rm -rf /app/node_modules /app/scripts && \
-    # mv /app/app-minimal/node_modules /app/ && \
-    # rm -rf /app/app-minimal && \
+RUN set -ex && \
+    find /app -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true && \
+    npm config set git false && \
     npm run build && \
+    [ ! -d ".git" ] || (echo "Git still exists!" && exit 1) && \
     ls -la /app && \
     du -hd1 /app
 
