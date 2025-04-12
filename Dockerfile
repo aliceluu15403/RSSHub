@@ -76,7 +76,6 @@ COPY --from=dep-builder /app /app
 
 # Add this right before the build command
 RUN find . -type d -name ".git" -exec rm -rf {} + || true
-RUN find . -type d -name ".git" -exec rm -rf {} + || true
 
 RUN \
     set -ex && \
