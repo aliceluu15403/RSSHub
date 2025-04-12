@@ -26,15 +26,16 @@ RUN \
     set -ex && \
     export PUPPETEER_SKIP_DOWNLOAD=true && \
     pnpm install --frozen-lockfile && \
-    pnpm rb
+    pnpm rebuild
+    
+RUN npx puppeteer browsers install chrome
+
 # Lazy install dependencies without downloading Chromium first
 RUN set -ex \
     && export PUPPETEER_SKIP_DOWNLOAD=true \
     && pnpm install --frozen-lockfile \
     && pnpm rebuild
 
-# Install Chromium for Puppeteer manually (fix "Chrome not found" error)
-RUN npx puppeteer browsers install chrome
 # ---------------------------------------------------------------------------------------------------------------------
 
 FROM debian:bookworm-slim AS dep-version-parser
