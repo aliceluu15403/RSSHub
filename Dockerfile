@@ -27,7 +27,8 @@ RUN \
     export PUPPETEER_SKIP_DOWNLOAD=true && \
     pnpm install --frozen-lockfile && \
     pnpm rb
-
+# Fix Puppeteer Chrome not found error
+RUN npx puppeteer browsers install chrome
 # ---------------------------------------------------------------------------------------------------------------------
 
 FROM debian:bookworm-slim AS dep-version-parser
@@ -104,7 +105,6 @@ RUN \
         echo 'Downloading Chromium...' && \
         unset PUPPETEER_SKIP_DOWNLOAD && \
         npm install -g corepack@latest && \
-        RUN apt-get update && apt-get install -y git
         corepack use pnpm@latest-9 && \
         pnpm add puppeteer@$(cat /app/.puppeteer_version) --save-prod && \
         pnpm rb ; \
