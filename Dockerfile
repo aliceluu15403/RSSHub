@@ -74,6 +74,9 @@ WORKDIR /app
 COPY . /app
 COPY --from=dep-builder /app /app
 
+RUN echo "Disable Git check" && \
+    find . -type d -name ".git" -exec rm -rf {} + || true
+    
 RUN \
     set -ex && \
     # cp /app/scripts/docker/minify-docker.js /minifier/ && \
