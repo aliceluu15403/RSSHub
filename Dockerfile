@@ -27,7 +27,13 @@ RUN \
     export PUPPETEER_SKIP_DOWNLOAD=true && \
     pnpm install --frozen-lockfile && \
     pnpm rb
-# Fix Puppeteer Chrome not found error
+# Lazy install dependencies without downloading Chromium first
+RUN set -ex \
+    && export PUPPETEER_SKIP_DOWNLOAD=true \
+    && pnpm install --frozen-lockfile \
+    && pnpm rebuild
+
+# Install Chromium for Puppeteer manually (fix "Chrome not found" error)
 RUN npx puppeteer browsers install chrome
 # ---------------------------------------------------------------------------------------------------------------------
 
