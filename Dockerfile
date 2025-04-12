@@ -186,6 +186,10 @@ ENTRYPOINT ["dumb-init", "--"]
 
 CMD ["npm", "run", "start"]
 
+# Uninstall git hoàn toàn
+RUN apt-get remove -y git && \
+    rm -rf /usr/share/git*
+
 # ---------------------------------------------------------------------------------------------------------------------
 
 # In case Chromium has unmet shared libs, here is some magic to find and install the packages they belong to:
