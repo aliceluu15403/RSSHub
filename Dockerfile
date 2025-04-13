@@ -37,6 +37,7 @@ FROM node:22-bookworm-slim AS docker-minifier
 WORKDIR /app
 COPY . /app
 COPY --from=dep-builder /app /app
+# Fake a .git directory to avoid fatal error
 RUN mkdir -p /app/.git/refs/heads && \
     echo "ref: refs/heads/fake-branch" > /app/.git/HEAD && \
     echo "0123456789abcdef0123456789abcdef01234567" > /app/.git/refs/heads/fake-branch && \
