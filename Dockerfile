@@ -75,8 +75,8 @@ COPY . /app
 COPY --from=dep-builder /app /app
 
 RUN set -ex && \
-    npm run build && \
     find /app -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true && \
+    npm run build && \
     npm config set git false && \
     [ ! -d ".git" ] || (echo "Git still exists!" && exit 1) && \
     ls -la /app && \
