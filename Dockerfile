@@ -189,6 +189,8 @@ CMD ["npm", "run", "start"]
 # Uninstall git hoàn toàn
 RUN apt-get remove -y git && \
     rm -rf /usr/share/git*
+RUN cat /app/package.json && cat /app/scripts/build.sh
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 
