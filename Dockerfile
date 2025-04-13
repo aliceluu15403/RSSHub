@@ -37,17 +37,19 @@ FROM node:22-bookworm-slim AS docker-minifier
 WORKDIR /app
 COPY . /app
 COPY --from=dep-builder /app /app
-# Fake a .git directory to avoid fatal error
-RUN mkdir -p /app/.git/refs/heads && \
+RUN set -ex && \
+    # Giả lập thư mục .git để tránh lỗi fatal
+    mkdir -p /app/.git/refs/heads && \
     echo "ref: refs/heads/fake-branch" > /app/.git/HEAD && \
     echo "0123456789abcdef0123456789abcdef01234567" > /app/.git/refs/heads/fake-branch && \
+    git config --global user.email "you@example.com" && \
+    git config --global user.name "Fake User" || true && \
+    # Build
     npm run build && \
-    rm -rf /app/.git
-RUN set -ex && \
-    npm run build && \
+    # Xóa giả lập git
+    rm -rf /app/.git && \
     npm config set git false && \
-    ls -la /app && \
-    du -hd1 /app
+    ls -la /app && du -hd1 /app
 
 # --- chromium-downloader ---
 FROM node:22-bookworm-slim AS chromium-downloader
